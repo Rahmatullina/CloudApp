@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html>
+<header>
+  <link rel="stylesheet" href="{% static "myApp/styles/form_style.css" %}">
+
+       <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- jQuery library-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</header>
+<body style="font-size: 10.5pt;font-family: 'Trebuchet MS', 'Arial', 'Tahoma', 'Verdana', 'sans-serif';">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#"></a>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+        <a class="nav-link" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Site for testing ansible with Azure 11.2019 SPBU
+        </a>
+        </li>
+        <li class="nav-item"><img src="{% static "myApp/images/user4.png" %}" style="height:40px; margin-left:10%">
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#">{{ username }}</a>
+        </li>
+    </ul>
+      <form method = "post">
+          <button type="button" class="btn btn-outline-success my-2 my-sm-3" >new Task</button>
+      </form>
+          <form class="form-inline my-2 my-lg-0">
+              <button type="button" class="btn btn-outline-success my-2 my-sm-3" onclick="window.location.href='/login/'">Выйти</button>
+          </form>
+  </div>
+</nav>
+
+<a class="top-sitename"><img class="top-sitename__logo" style="height:80px;margin-top:3%;" src="{% static "myApp/images/inform_logo.jpg" %}">
+              <span class="top-sitename__title">Site for testing ansible with Azure 11.2019 SPBU</span>
+</a>
+
+<img style="display:inline-block;margin-right: 10px; margin-left:35%;position: relative; top:-150px;" src = "{% static "myApp/images/profile.png" %}">
+<div style="display:inline-block "><p style="text-align: left;"><b>Профиль</b></p>
+        {% csrf_token %}
+    <label> <b>Имя пользователя:</b></label>
+    <p>{{ username}}</p>
+    <label><b>Email:</b></label>
+    <p>{{ email }}</p>
+    <label><b>Tasks:</b></label>
+</div>
+</body>
+</html>
