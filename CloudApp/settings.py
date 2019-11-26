@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'CloudApp.urls'
@@ -74,12 +75,14 @@ WSGI_APPLICATION = 'CloudApp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+DATABASES = {}
+DATABASES['default'] = {
+'ENGINE': 'django.db.backends.postgresql_psycopg2',
+'NAME': os.environ.get('DB_NAME','d80fkaov28t5t9'),
+'USER' : os.environ.get('DB_USER','ovhvazxuclsasq'),
+'PASSWORD' : os.environ.get('DB_PASSWORD','2687227f640a63bb3a9d1e0f7b202f4d2aa2e5f47910ba208b237691b19096a5'),
+'HOST' : os.environ.get('DB_HOST','ec2-184-73-232-93.compute-1.amazonaws.com'),
+'PORT' : '5432',
 }
 
 
