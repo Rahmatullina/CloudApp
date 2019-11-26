@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'CloudApp.wsgi.application'
 DATABASES = {}
 DATABASES['default'] = {
 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-'NAME': os.environ.get('DB_NAME','d80fkaov28t5t9'),
-'USER' : os.environ.get('DB_USER','ovhvazxuclsasq'),
-'PASSWORD' : os.environ.get('DB_PASSWORD','2687227f640a63bb3a9d1e0f7b202f4d2aa2e5f47910ba208b237691b19096a5'),
-'HOST' : os.environ.get('DB_HOST','ec2-184-73-232-93.compute-1.amazonaws.com'),
+'NAME': os.environ.get('DB_NAME','d7evq4eau851cb'),
+'USER' : os.environ.get('DB_USER','bgytwdnbgsgmay'),
+'PASSWORD' : os.environ.get('DB_PASSWORD','796a84b9338d7b231068d504ee76daf02b11b1cee1ba847b414b8b645d8f891f'),
+'HOST' : os.environ.get('DB_HOST','ec2-174-129-254-231.compute-1.amazonaws.com'),
 'PORT' : '5432',
 }
 
