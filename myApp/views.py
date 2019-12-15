@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from .forms import LoginForm
+import subprocess
 
-from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -38,11 +38,22 @@ def get_profile(request):
                                            'username': request.user.username,
                                            'email': request.user.email
                                            })
-    if request.method == 'POST':
+
+    else:
+        return HttpResponseNotFound('Sorry Page Not Found')
+
+
+@login_required(login_url='/login/',redirect_field_name='/newTask/')
+def new_task(request):
+    if request.method == 'GET':
+        print('Start ansible')
+        delete_result = subprocess.run(['ansible-playbook', 'hello_world.yml'],
+                                       capture_output=True)
+        print('End ansible')
+
         return render(request, 'myApp/profile.html', {
             'username': request.user.username,
             'email': request.user.email
         })
     else:
         return HttpResponseNotFound('Sorry Page Not Found')
-
