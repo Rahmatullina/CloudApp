@@ -34,12 +34,13 @@ def empty_view(request):
 @login_required(login_url='/login/',redirect_field_name='/profile/')
 def get_profile(request):
     if request.method == 'GET':
+        print('Profile GET:')
         return render(request, 'myApp/profile.html', {
                                            'username': request.user.username,
                                            'email': request.user.email
                                            })
     if request.method == 'POST':
-        print('Start ansible')
+        print('Profile POST:')
         delete_result = subprocess.run(['ansible-playbook', 'hello_world.yml'])
         print('End ansible')
 
