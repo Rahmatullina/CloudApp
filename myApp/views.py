@@ -47,8 +47,7 @@ def get_profile(request):
 def new_task(request):
     if request.method == 'GET':
         print('Start ansible')
-        delete_result = subprocess.run(['ansible-playbook', 'hello_world.yml'],
-                                       capture_output=True)
+        delete_result = subprocess.run(['ansible-playbook', 'hello_world.yml'])
         print('End ansible')
 
         return render(request, 'myApp/profile.html', {
