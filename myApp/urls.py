@@ -10,5 +10,4 @@ urlpatterns = [
 
     re_path(r'^profile/$', views.get_profile, name='get_profile'),
 
-    re_path(r'^newTask/$', views.new_task, name='create_new_task'),
 ]
