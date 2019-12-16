@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from .forms import LoginForm
 import subprocess
+import random,string,re,time,os
+from django.contrib import messages
 
 # Create your views here.
 
@@ -34,21 +36,84 @@ def empty_view(request):
 @login_required(login_url='/login/',redirect_field_name='/profile/')
 def get_profile(request):
     if request.method == 'GET':
-        print('Profile GET:')
+        print('/Profile/ GET:')
         return render(request, 'myApp/profile.html', {
                                            'username': request.user.username,
-                                           'email': request.user.email
+                                           'email': request.user.email,
+                                           'is_created_VM': False
                                            })
     if request.method == 'POST':
-        print('Profile POST:')
-        delete_result = subprocess.run(['ansible-playbook', 'hello_world.yml'])
-        print('End ansible')
-
+        print('/Profile/ POST:')
+        compelted = create_VM_and_run(request.user.username)
+        if compelted:
+            with open(f'output_{request.username}') as file:
+                messages.info(request, 'Sinonims :' + ' '.join(list(file.readlines())))
+                os.remove(f'output_{request.username}')
+        else: messages.info(request, 'Some Error occured during running task')
         return render(request, 'myApp/profile.html', {
             'username': request.user.username,
-            'email': request.user.email
+            'email': request.user.email,
+            'is_created_VM': True,
+            'is_completed': 'is completed. :)' if compelted else 'is not completed, Sorry'
         })
 
     else:
         return HttpResponseNotFound('Sorry Page Not Found')
+
+
+def random_id(length=6):
+    letters = string.ascii_lowercase + string.digits
+    return ''.join(random.choice(letters) for i in range(length))
+
+
+def deletevm(vm_id):
+    print(f'Deleting VM with id: \033[1m{vm_id}\033[0m')
+    delete_result = subprocess.run(['ansible-playbook', './playbooks/deleteVM.yml', '--extra-vars', 'vmID=' + vm_id])
+    print(f'VM deletion exited with return code: {delete_result.returncode} ({"un" if delete_result.returncode != 0 else ""}successful)')
+    if delete_result.returncode != 0:
+        print('=> STDOUT:')
+        print(delete_result.stdout.decode('utf-8'))
+        print('=> STDERR:')
+        print(delete_result.stderr.decode('utf-8'))
+        return
+
+
+def create_VM_and_run(username):
+    vm_id = random_id()
+    create_time = time.time()
+    result = subprocess.run(['ansible-playbook', './playbooks/createVM.yml','--extra-vars', 'vmID=' + vm_id])
+    print(
+        f'VM creation exited with return code: {result.returncode} ({"un" if result.returncode != 0 else ""}successful)')
+    if result.returncode != 0:
+        print('=> STDOUT:')
+        print(result.stdout.decode('utf-8'))
+        print('=> STDERR:')
+        print(result.stderr.decode('utf-8'))
+        return False
+
+    vm_ip = re.findall(r'\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b',
+                       result.stdout.decode('utf-8'))[0]
+    print(f'Created VM with IP: {vm_ip} ({int(time.time() - create_time)}s)')
+
+    with open(f'template.configuration') as template_config:
+        template = template_config.read().replace('IP_ADDRESS', vm_ip)
+        with open(f'hosts_{vm_id}.ini', 'w') as hosts:
+            hosts.write(template)
+
+    print(f'Setting up the VM...')
+    setup_time = time.time()
+    setup_result = subprocess.run(['ansible-playbook', '-i', f'hosts_{vm_id}.ini', './playbooks/runTask.yml','--extra-vars','username='+ username])
+    print(f'VM setup exited with return code: {setup_result.returncode} '
+          f'({"un" if setup_result.returncode != 0 else ""}successful, {int(time.time() - setup_time)}s)')
+
+    if setup_result.returncode != 0:
+        print('=> STDOUT:')
+        print(setup_result.stdout.decode('utf-8'))
+        print('=> STDERR:')
+        print(setup_result.stderr.decode('utf-8'))
+        deletevm(vm_id)
+        return False
+    deletevm(vm_id)
+    os.remove(f'hosts_{vm_id}.ini')
+    return True
 

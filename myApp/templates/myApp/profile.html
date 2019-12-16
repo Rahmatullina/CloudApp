@@ -35,8 +35,9 @@
         <a class="nav-link" href="#">{{ username }}</a>
         </li>
     </ul>
-      <form class="form-inline my-2 my-lg-0" >
-          <button type="button" class="btn btn-outline-success my-2 my-sm-3"  formmethod="post" onclick="window.location.href='/profile/'" >new Task</button>
+      <form class="form-inline my-2 my-lg-0" method="post" action="" >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-success my-2 my-sm-3">new Task</button>
       </form>
           <form class="form-inline my-2 my-lg-0">
               <button type="button" class="btn btn-outline-success my-2 my-sm-3" onclick="window.location.href='/login/'">Выйти</button>
@@ -56,6 +57,9 @@
     <label><b>Email:</b></label>
     <p>{{ email }}</p>
     <label><b>Tasks:</b></label>
+    {% if is_created_VM %}
+        <p>Task {{ is_completed }}</p>
+    {% endif %}
 </div>
 </body>
 </html>

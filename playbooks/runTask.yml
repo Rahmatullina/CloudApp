@@ -1,0 +1,25 @@
+# playbook.yml
+---
+- hosts: workers
+  sudo: yes
+
+  tasks:
+  - name: Install prerequisites
+    become: true
+    apt:
+      update_cache: yes
+      pkg:
+        python3-pip
+  -name: Install gensim
+    shell : sudo pip3 install gensim
+  - name: Copy files
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: '~/repos/CloudApp/task.py', dest: '/task.py' }
+    - { src: '~/repos/CloudApp/pretrained.model', dest: '/pretrained.model' }
+  - name: Execute script
+    command: /opt/test.py
+  - name: Fetch file
+    fetch: src={{ item.src }} dest={{ item.dest }}
+    with_items:
+    - { src: '/output.txt', dest: '~/repos/CloudApp/output_{{ username }}.txt' }
