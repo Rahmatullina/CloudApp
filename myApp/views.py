@@ -95,7 +95,7 @@ def create_VM_and_run(username):
         result.stdout.decode('utf-8'))[0]
     print(f'Created VM with IP: {vm_ip} ({int(time.time() - create_time)}s)')
 
-    with open(f'template.configuration') as template_config:
+    with open(f'./playbooks/template.configuration') as template_config:
         template = template_config.read().replace('IP_ADDRESS', vm_ip)
         with open(f'hosts_{vm_id}.ini', 'w') as hosts:
             hosts.write(template)
@@ -111,9 +111,10 @@ def create_VM_and_run(username):
         print(setup_result.stdout.decode('utf-8'))
         print('=> STDERR:')
         print(setup_result.stderr.decode('utf-8'))
+        os.remove(f'hosts_{vm_id}.ini')
         deletevm(vm_id)
         return False
-    deletevm(vm_id)
     os.remove(f'hosts_{vm_id}.ini')
+    deletevm(vm_id)
     return True
 
