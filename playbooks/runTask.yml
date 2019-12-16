@@ -12,7 +12,8 @@
         python3-pip
 
   -name: Install gensim
-    pip : gensim
+    -pip :
+      name: gensim
 
   - name: Copy files
     copy: src={{ item.src }} dest={{ item.dest }}
@@ -22,7 +23,7 @@
 
   - name: Execute script
     command: /opt/test.py
-    
+
   - name: Fetch file
     fetch: src={{ item.src }} dest={{ item.dest }}
     with_items:
