@@ -10,7 +10,9 @@
       apt:
         update_cache: yes
         pkg:
+          python3
           python3-pip
+          python3-setuptools
 
     - pip: name=pip
       name: gensim==3.8.1
