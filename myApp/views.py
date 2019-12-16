@@ -7,6 +7,7 @@ from .forms import LoginForm
 import subprocess
 import random,string,re,time,os
 from django.contrib import messages
+from subprocess import PIPE
 
 # Create your views here.
 
@@ -68,7 +69,7 @@ def random_id(length=6):
 
 def deletevm(vm_id):
     print(f'Deleting VM with id: \033[1m{vm_id}\033[0m')
-    delete_result = subprocess.run(['ansible-playbook', './playbooks/deleteVM.yml', '--extra-vars', 'vmID=' + vm_id])
+    delete_result = subprocess.run(['ansible-playbook', './playbooks/deleteVM.yml', '--extra-vars', 'vmID=' + vm_id], stdout=PIPE, stderr=PIPE)
     print(f'VM deletion exited with return code: {delete_result.returncode} ({"un" if delete_result.returncode != 0 else ""}successful)')
     if delete_result.returncode != 0:
         print('=> STDOUT:')
@@ -81,7 +82,7 @@ def deletevm(vm_id):
 def create_VM_and_run(username):
     vm_id = random_id()
     create_time = time.time()
-    result = subprocess.run(['ansible-playbook', './playbooks/createVM.yml','--extra-vars', 'vmID=' + vm_id])
+    result = subprocess.run(['ansible-playbook', './playbooks/createVM.yml','--extra-vars', 'vmID=' + vm_id], stdout=PIPE, stderr=PIPE)
     print(
         f'VM creation exited with return code: {result.returncode} ({"un" if result.returncode != 0 else ""}successful)')
     if result.returncode != 0:
@@ -90,9 +91,8 @@ def create_VM_and_run(username):
         print('=> STDERR:')
         print(result.stderr.decode('utf-8'))
         return False
-
     vm_ip = re.findall(r'\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b',
-                       result.stdout.decode('utf-8'))[0]
+        result.stdout.decode('utf-8'))[0]
     print(f'Created VM with IP: {vm_ip} ({int(time.time() - create_time)}s)')
 
     with open(f'template.configuration') as template_config:
@@ -102,7 +102,7 @@ def create_VM_and_run(username):
 
     print(f'Setting up the VM...')
     setup_time = time.time()
-    setup_result = subprocess.run(['ansible-playbook', '-i', f'hosts_{vm_id}.ini', './playbooks/runTask.yml','--extra-vars','username='+ username])
+    setup_result = subprocess.run(['ansible-playbook', '-i', f'hosts_{vm_id}.ini', './playbooks/runTask.yml','--extra-vars','username='+ username], stdout=PIPE, stderr=PIPE)
     print(f'VM setup exited with return code: {setup_result.returncode} '
           f'({"un" if setup_result.returncode != 0 else ""}successful, {int(time.time() - setup_time)}s)')
 

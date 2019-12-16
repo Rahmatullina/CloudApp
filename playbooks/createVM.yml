@@ -26,11 +26,11 @@
       resource_group: vmResourceGroup
       name: "vm-{{ vmID }}"
       vm_size: Standard_B1s
-      admin_username: vmadmin
+      admin_username: stron
       managed_disk_type: Premium_LRS
       ssh_password_enabled: false
       ssh_public_keys:
-        - path: /home/vmadmin/.ssh/authorized_keys
+        - path: /home/stron/.ssh/authorized_keys
           key_data: "{{ ssh_public_key }}"
       open_ports: [22]
       public_ip_allocation_method: Dynamic
