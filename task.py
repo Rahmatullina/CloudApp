@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from gensim.models.word2vec import Word2Vec
 import os
-model_restored = Word2Vec.load('~/repos/CloudApp/test/pretrained.model')
+model_restored = Word2Vec.load('~/pretrained.model')
 output = model_restored.most_similar("bear")
 n = 10
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'output.txt'),'w+')as outFile:
