@@ -19,9 +19,9 @@
       - { src: '~/repos/CloudApp/pretrained.model', dest: '~/pretrained.model' }
 
     - name: Execute script
-      raw: python3 ~/task.py
+      raw: python3 task.py
 
     - name: Fetch file
       fetch: src={{ item.src }} dest={{ item.dest }} flat=yes
       with_items:
-      - { src: '~/output.txt', dest: '~/repos/CloudApp/{{ username }}/' }
+      - { src: '~/output.txt', dest: '~/repos/CloudApp' }
