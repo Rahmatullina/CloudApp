@@ -51,19 +51,20 @@
 
 <img style="display:inline-block;margin-right: 10px; margin-left:35%;position: relative; top:-150px;" src = "{% static "myApp/images/profile.png" %}">
 <div style="display:inline-block "><p style="text-align: left;"><b>Профиль</b></p>
- {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+
         {% csrf_token %}
     <label> <b>Имя пользователя:</b></label>
     <p>{{ username}}</p>
     <label><b>Email:</b></label>
     <p>{{ email }}</p>
-    <label><b>Tasks:</b></label>
+    <label><b>Task result: sinonim of word "bear":</b></label>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
     {% if is_created_VM %}
         <p>Task {{ is_completed }}</p>
     {% endif %}
