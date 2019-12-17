@@ -38,6 +38,7 @@ def empty_view(request):
 def get_profile(request):
     if request.method == 'GET':
         print('/Profile/ GET:')
+        messages.info(request, "Hello it is your profile" )
         return render(request, 'myApp/profile.html', {
                                            'username': request.user.username,
                                            'email': request.user.email,
