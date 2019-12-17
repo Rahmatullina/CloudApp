@@ -2,11 +2,12 @@
 ---
 - name: Run python script
   hosts: localhost
-  become: yes
 
   tasks:
     - name: Install prerequisites
+      become: yes
       raw: pip3 install gensim
+      
     - name: Copy files
       copy: src={{ item.src }} dest={{ item.dest }}
       with_items:
