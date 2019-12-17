@@ -50,8 +50,11 @@ def get_profile(request):
         if compelted:
             with open(f'./{request.user.username}/output.txt') as file:
                 messages.info(request, 'Sinonims :' + ' '.join(list(file.readlines())))
-                os.remove(f'./{request.user.username}/output.txt')
-        else: messages.info(request, 'Some Error occured during running task')
+            os.remove(f'./{request.user.username}/output.txt')
+            os.rmdir(f'./{request.user.username}')
+        else: 
+            messages.info(request, 'Some Error occured during running task')
+            os.rmdir(f'./{request.user.username}')
         return render(request, 'myApp/profile.html', {
             'username': request.user.username,
             'email': request.user.email,
