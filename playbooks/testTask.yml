@@ -20,4 +20,4 @@
     - name: Fetch file
       fetch: src={{ item.src }} dest={{ item.dest }} flat=yes
       with_items:
-      - { src: '~/repos/CloudApp/test/output.txt', dest: '~/repos/CloudApp/{username}' }
+      - { src: '~/repos/CloudApp/test/output.txt', dest: '~/repos/CloudApp/{{username}}/' }
