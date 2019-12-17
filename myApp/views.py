@@ -47,9 +47,9 @@ def get_profile(request):
         print('/Profile/ POST:')
         compelted = create_VM_and_run(request.user.username)
         if compelted:
-            with open(f'output_{request.username}') as file:
+            with open(f'./{request.user.username}/output.txt') as file:
                 messages.info(request, 'Sinonims :' + ' '.join(list(file.readlines())))
-                os.remove(f'output_{request.username}')
+                os.remove(f'./{request.user.username}/output.txt')
         else: messages.info(request, 'Some Error occured during running task')
         return render(request, 'myApp/profile.html', {
             'username': request.user.username,
