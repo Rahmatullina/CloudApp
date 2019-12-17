@@ -3,15 +3,20 @@
 - name: Run python script
   hosts: workers
   remote_user: stron
-  become: yes
 
   tasks:
     - name: Update apt-get
+      become: yes
       raw: sudo apt-get update
+      
     - name: Install python3
+      become: yes
       raw: sudo apt install -y python3-pip
+      
     - name: Install prerequisites
+      become: yes
       raw: pip3 install gensim
+      
     - name: Copy files
       copy: src={{ item.src }} dest={{ item.dest }}
       with_items:
@@ -24,4 +29,4 @@
     - name: Fetch file
       fetch: src={{ item.src }} dest={{ item.dest }} flat=yes
       with_items:
-      - { src: '~/output.txt', dest: '~/repos/CloudApp' }
+      - { src: '~/output.txt', dest: '~/repos/CloudApp/{{username}}/' }
